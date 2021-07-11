@@ -1,0 +1,132 @@
+{
+  "version": "0.2.1",
+  "outDir": "BuildVS\\${cpp.activeConfiguration}",
+  "esptool": "${env.ESP32_IDF_PATH}/components/esptool_py/esptool/esptool.py",
+  "comment": "This is a comment",
+    "tasks": [
+        {
+            "taskLabel": "task-CMakeLists",
+            "appliesTo": "CMakeLists.txt",
+            "type": "launch"
+        },
+        {
+            "taskLabel": "task-nf-interpreter",
+            "appliesTo": "/",
+            "type": "launch"
+        },
+        {
+            "taskLabel": "Print Output Directory",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "echo  Output Directory:  ${outDir} "
+            ]
+        },
+        {
+            "taskLabel": "MakerPython - Erase",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"Erasing Flash\" /wait runcmd -5",
+                "${esptool} --chip esp32 --port COM4 --baud 921600 --before \"default_reset\" --after \"hard_reset\" erase_flash"
+            ]
+        },
+        {
+            "taskLabel": "MakerPython - Flash nanoCLR",
+            "appliesTo": "*",
+            "type": "default",                                                                                     
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"ESP32 - Flashing nanoCLR ESP32\" /wait runcmd -5",
+                "${esptool} --chip esp32 --port COM4 --baud 921600 --before \"default_reset\" --after \"hard_reset\" write_flash -z --flash_mode \"dio\" --flash_freq \"40m\" --flash_size detect 0x1000 ${env.ESP32_LIBS_PATH}/bootloader.bin 0x10000 ${outDir}/nanoCLR.bin 0x8000 ${outDir}/partitions_4mb.bin"
+            ]
+        },
+        {
+            "taskLabel": "MakerFabs 3_5 - Erase (ON COM3)",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"Erasing Flash\" /wait runcmd -5",
+                "${esptool} --chip esp32 --port COM3 --baud 921600 --before \"default_reset\" --after \"hard_reset\" erase_flash"
+            ]
+        },
+        {
+            "taskLabel": "MakerFabs 3_5 - Flash nanoCLR (ON COM3)",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"ESP32 - Flashing nanoCLR\" /wait runcmd -5",
+                "${esptool} --chip esp32 --port COM3 --baud 921600 --before \"default_reset\" --after \"hard_reset\" write_flash -z --flash_mode \"dio\" --flash_freq \"40m\" --flash_size detect 0x1000 ${env.ESP32_LIBS_PATH}/bootloader.bin 0x10000 ${outDir}/nanoCLR.bin 0x8000 ${outDir}/partitions_4mb.bin"
+            ]
+        },
+        {
+            "taskLabel": "MakerFabs 3_5 - Erase (ON COM5)",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"Erasing Flash\" /wait runcmd -5",
+                "${esptool} --chip esp32 --port COM5 --baud 921600 --before \"default_reset\" --after \"hard_reset\" erase_flash"
+            ]
+        },
+        {
+            "taskLabel": "MakerFabs 3_5 - Flash nanoCLR (ON COM5)",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"ESP32 - Flashing nanoCLR\" /wait runcmd -5",
+                "${esptool} --chip esp32 --port COM5 --baud 921600 --before \"default_reset\" --after \"hard_reset\" write_flash -z --flash_mode \"dio\" --flash_freq \"40m\" --flash_size detect 0x1000 ${env.ESP32_LIBS_PATH}/bootloader.bin 0x10000 ${outDir}/nanoCLR.bin 0x8000 ${outDir}/partitions_4mb.bin"
+            ]
+        },
+        {
+            "taskLabel": "Wrover-Kit-V41(ESP32) Erase",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"Erasing Flash\" /wait runcmd -5",
+                "${esptool} --chip esp32 --port COM13 --baud 921600 --before \"default_reset\" --after \"hard_reset\" erase_flash"
+            ]
+        },
+        {
+            "taskLabel": "Wrover-Kit-V41(ESP32) Flash nanoCLR",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"ESP32 - Flashing nanoCLR\" /wait runcmd -5",
+                "${esptool} --chip esp32 --port COM13 --baud 921600 --before \"default_reset\" --after \"hard_reset\" write_flash -z --flash_mode \"dio\" --flash_freq \"40m\" --flash_size detect 0x1000 ${env.ESP32_LIBS_PATH}/bootloader.bin 0x10000 ${outDir}/nanoCLR.bin 0x8000 ${outDir}/partitions_4mb.bin"
+            ]
+        },
+        {
+            "taskLabel": "Flash nanobooter(STM32F769I)",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"Use ST-LINK CLI to write nanoBooter.hex\" /wait runcmd -2",
+                "\"C:\\Program Files (x86)\\STMicroelectronics\\STM32 ST-LINK Utility\\ST-LINK Utility\\ST-LINK_CLI.exe\" -c SWD -p c:\\nf\\nf-interpreter\\build\\ST_STM32F769I_DISCOVERY\\nanoBooter.hex"
+            ]
+        },
+        {
+            "taskLabel": "Flash nanoCLR(STM32F769I)",
+            "appliesTo": "*",
+            "type": "default",
+            "command": "${env.COMSPEC}",
+            "args": [
+                "start \"Use ST-LINK CLI to write nanoCLR.hex\" /wait runcmd -2",
+                "\"C:\\Program Files (x86)\\STMicroelectronics\\STM32 ST-LINK Utility\\ST-LINK Utility\\ST-LINK_CLI.exe\" -c SWD -p c:\\nf\\nf-interpreter\\build\\ST_STM32F769I_DISCOVERY\\nanoCLR.hex -Rst"
+            ]
+        },
+        {
+            "taskLabel": "task-nf",
+            "appliesTo": "/",
+            "type": "launch"
+        }
+    ]                            
+}
